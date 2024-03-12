@@ -1,8 +1,15 @@
 import flet as ft
+from viagens_list import viagens
 
 
 class LandingPage(ft.Column):
     def __init__(self):
+        self.lista_vianges = []
+        for propriedade in viagens:
+            self.lista_vianges.append(CardsViagem(propriedade["cidade"],propriedade["caminho_img"],propriedade["periodo_viagem"]))
+            print(propriedade["cidade"])
+        print(self.lista_vianges)
+        
         self.pagina_inicial = ft.Column(
             controls=[
                 ft.Row(
@@ -45,7 +52,7 @@ class LandingPage(ft.Column):
                     ),
                 ),
                 ft.Divider(height=30,color='transparent'),
-                ft.Row(controls=[CardsViagem()]),
+                ft.Row(controls=self.lista_vianges),
             ]
         )
 
@@ -104,7 +111,7 @@ class LandingPage(ft.Column):
 
 
 class CardsViagem(ft.Container):
-    def __init__(self):
+    def __init__(self,cidade_nome:str,cidade_img:str,periodo_viagem:str):
         super().__init__(
             height=240,
             width=200,
@@ -123,7 +130,7 @@ class CardsViagem(ft.Container):
                 ft.Container(
                     height=148,
                     content=ft.Image(
-                        src="imgs/São Paulo.jpg",
+                        src=cidade_img,
                         fit="cover",
                     ),
                 ),
@@ -135,7 +142,7 @@ class CardsViagem(ft.Container):
                         expand=True,
                         controls=[
                             ft.Text(
-                                value="São Paulo",
+                                value=cidade_nome,
                                 font_family="Poppins-Regular",
                                 size=20,
                             ),
@@ -144,7 +151,7 @@ class CardsViagem(ft.Container):
                                 alignment=ft.alignment.center_right,
                                 content=
                                     ft.Text(
-                                        value="15/03 - 17/03",
+                                        value=periodo_viagem,
                                         font_family="Poppins-Regular",
                                         color="#929292",
                                         size=13,
