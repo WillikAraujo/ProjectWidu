@@ -1,5 +1,7 @@
 import flet as ft
 from menu_list import lista
+from LandingPage import LandingPage
+from time import sleep
 
 
         #botão do menu lateral...
@@ -32,13 +34,15 @@ class BotaoMenu(ft.Container):
 
         #menu lateral...
 class MenuLateral(ft.Container):
-    def __init__(self):
+    def __init__(self,landing_page: LandingPage):
         super().__init__(
             width=250,
-            height=936,
+            height=850,
             border_radius=ft.BorderRadius(0, 133, 0, 0),
             border=ft.Border(right=ft.BorderSide(1, "#F5F5F5")),
         )
+        #declarando landing_page
+        self.landing_page = landing_page
 
         #declarando lista de objeto dos botões
         self.lista_obj_menu = []
@@ -87,6 +91,11 @@ class MenuLateral(ft.Container):
         for btn in self.lista_obj_menu:
             btn.on_hover = lambda e: self.on_hover_btn(e)
             btn.on_click= lambda e: self.on_click_btn(e)
+            if btn.text == 'Página inicial':
+                btn.content.controls[0].src = btn.icon_active
+                btn.content.controls[0].color = "white"
+                btn.content.controls[1].color = "white"
+                btn.bgcolor = "#252525"
     
     def redefinir_btns(self, e):
         for btn in self.lista_obj_menu:
@@ -103,6 +112,7 @@ class MenuLateral(ft.Container):
         e.control.content.controls[0].color = "white"
         e.control.content.controls[1].color = "white"
         e.control.bgcolor = "#252525"
+        self.change_landing_page(e)
         e.control.update()
     
     def on_hover_btn(self, e):                
@@ -111,3 +121,16 @@ class MenuLateral(ft.Container):
         elif e.control.bgcolor == "#F9F9F9":
             e.control.bgcolor = "white"
         e.control.update()
+        
+    def change_landing_page(self, e):
+        if e.control.text == "Página inicial":
+            new_landing = self.landing_page.pagina_inicial
+        elif e.control.text == "Viagens":
+            new_landing = self.landing_page.viagens
+        self.landing_page.opacity = 0
+        self.landing_page.update()
+        sleep(0.2)
+        self.landing_page.opacity = 1
+        self.landing_page.update()
+        self.landing_page.update_content(new_landing)
+            
